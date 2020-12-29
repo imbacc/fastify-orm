@@ -1,0 +1,29 @@
+{
+  "name": "fast-fastify",
+  "version": "1.0.0",
+  "description": "快速构建fastify",
+  "main": "index.js",
+  "scripts": {
+    "serve": "cls && node ./src/index",
+    "dev": "cls && nodemon ./src/index "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imbacc/fast-fastify.git"
+  },
+  "author": "imbacc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imbacc/fast-fastify/issues"
+  },
+  "homepage": "https://github.com/imbacc/fast-fastify#readme",
+  "dependencies": {
+    "fastify": "^2.11.0",
+    "fastify-jwt": "^1.2.1",
+    "fastify-no-icon": "^3.0.0",
+    "md5-node": "^1.0.1",
+    "mysql": "^2.17.1",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {}
+}
