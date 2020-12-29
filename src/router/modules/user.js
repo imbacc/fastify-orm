@@ -45,7 +45,6 @@ module.exports = (fastify) => [
       method: 'GET',
       url: '/qqq/:id',
       handler: (req, reply) => {
-          console.log(req.params.id)
           reply.send(req.params.id)
       }
     },
@@ -53,7 +52,6 @@ module.exports = (fastify) => [
       method: 'POST',
       url: '/schema',
       handler: (req, reply) => {
-          console.log('i am schema')
           reply.send('i am schema')
           // maxParamLength 
           // 你可以为通过 maxParamLength 选项为带参路由 (无论是标准的、正则匹配的，还是复数的) 设置最大参数长度。
