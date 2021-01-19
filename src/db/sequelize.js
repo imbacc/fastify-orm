@@ -1,6 +1,9 @@
 const fs = require('fs')
 const { Sequelize, DataTypes } = require("sequelize")
 const config = require('../common/config').mysql
+
+console.log("config=", config);
+
 const db = {}
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {

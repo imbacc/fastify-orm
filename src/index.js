@@ -38,5 +38,6 @@ fastify.listen(port, ip, queue, (err)=>{
 	if(err) throw err
 	console.green(`服务指向IP: ${ip}`)
 	console.green(`服务监听端口: ${port}`)
+	console.green(`服务已启动: http://${ip}:${port}/`)
 	// console.green(`路由树形结构:\n ${fastify.printRoutes()}`)
 })

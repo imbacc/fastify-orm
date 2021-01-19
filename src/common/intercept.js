@@ -74,8 +74,8 @@ module.exports = (fastify) => {
 			
 			apitime(fastify,url,head.onlyid).then((bool)=>{
 				if(!bool){
-					// console.log('终止请求...')
-					reply.send(resultful('API_OutTime'))
+					console.log({ id: req.id, code: 401 }, '服务器繁忙...')
+					reply.code(401).send(resultful('API_OutTime'))
 				}else{
 					check_jwt(fastify,head,req,reply,next)
 				}

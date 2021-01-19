@@ -4,8 +4,8 @@
   "description": "快速构建fastify",
   "main": "./src/index.js",
   "scripts": {
-    "dev": "cls && nodemon",
-    "serve": "cls && node"
+    "dev": "set NODE_ENV=dev && cls && nodemon",
+    "serve": "set NODE_ENV=prod && cls && node"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,18 @@
-module.exports = {
-	
-	//mysql配置
-	mysql:{
+const env = process?.env?.NODE_ENV?.trim() || 'dev'
+const md5 = require('md5-node')
+
+// 定义全局属性
+global.api_cache = {}
+
+// 全局配置
+const jwt_config = {
+	dev: md5('imbacc'),
+	prod: md5('by imbacc')
+}
+
+// mysql
+const mysql_config = {
+	dev: {
 		host: '127.0.0.1',
 		username: 'root',
 		password: 'root',
@@ -9,24 +20,58 @@ module.exports = {
 		database: 'test',
 		createTable: false // 重新生成数据库
 	},
-	
-	//redis配置
-	redis:{
+	prod: {
+		host: '127.0.0.1',
+		username: 'root',
+		password: 'root',
+		port: 3306,
+		database: 'test',
+		createTable: false // 重新生成数据库
+	},
+}
+
+// redis
+const redis_config = {
+	dev: {
 		host: '127.0.0.1',
 		port: 6379,
 	},
-	
-	//数据库表信息
-	bean: {
-		app_info:['id','text','version','os','ostext','linkurl'],
-	},
-	
-	//开启redis api限流 可再开启nginx限流
-	apitime: true,
-	
-	//redis api限流设置 '路由名字':[每秒,次数]
-	limit: {
-		'/version': [10, 5],
-		'/movies/index': [10, 20]
+	prod: {
+		host: '127.0.0.1',
+		port: 6379
 	}
+}
+
+// redis api限流设置 '路由名字':[每秒,次数]
+const limit_config = {
+	dev: {
+		'/version': [10, 5],
+		'/fff': [1, 20]
+	},
+	prod: {
+		'/version': [10, 5],
+		'/fff': [10, 20]
+	}
+}
+
+const mysql = mysql_config[env]
+const redis = redis_config[env]
+const jwtkey = jwt_config[env]
+const apitime = Boolean(env === 'dev')
+const limit = limit_config[env]
+
+// 按需导出
+module.exports.mysql = mysql
+module.exports.redis = redis
+module.exports.jwtkey = jwtkey
+module.exports.apitime = apitime
+module.exports.limit = limit
+
+// 默认导出
+module.exports = {
+	mysql,
+	redis,
+	jwtkey,
+	apitime,
+	limit
 }

@@ -27,6 +27,8 @@ module.exports = (fastify) => [
           // })
 
           fastify.exec.app_info.findAll().then((res)=> {
+            // const onlyid = fastify.md5(req.headers.authorization) || ''
+            // fastify.set_redis(`api_${req.raw.originalUrl}_${onlyid}`, res, 5) //默认360分钟一个小时 60 * 60
             reply.send(res)
           })
       }

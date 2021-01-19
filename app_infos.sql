@@ -17,8 +17,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for `app_info`
 -- ----------------------------
-DROP TABLE IF EXISTS `app_info`;
-CREATE TABLE `app_info` (
+DROP TABLE IF EXISTS `app_infos`;
+CREATE TABLE `app_infos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `text` varchar(200) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,

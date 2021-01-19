@@ -9,52 +9,48 @@
 const config = require('./config.js')
 const router = config.limit
 
-module.exports = async (fastify, spname, spid, time = 30, count = 10, update = false) => {
-	
+module.exports = (fastify, spname, spid, time = 30, count = 10, update = false) => {
+
 	//false为关闭redis限流
-	if(!config.apitime) return true
-	
-	const val = spname + '_' + spid
-	const key_id = 'apit_' + val
-	const key_id2 = 'apin_' + val
-	const cfg = router[spname.split('?')[0]]
+	if(!config.apitime) return Promise.resolve(true)
+
+	let cache_data = global.api_cache
+	let val = spname + '_' + spid
+	let key_id_time = 'apit_' + val
+	let key_id_num = 'apin_' + val
+	let cfg = router[spname.split('?')[0]]
 	
 	if(typeof cfg === 'object' && !update){
 		time = cfg[0]
 		count = cfg[1]
 	}
 	
-	const api_time = await fastify.get_redis(key_id) 	//获取 访问API时间间隔
-	const api_count = await fastify.get_redis(key_id2) 	//获取 访问API次数间隔的时间
-	const datetime = new Date().getTime()
-	const cache = time * count
+	let api_time = cache_data[key_id_time] || false 	//获取 访问API时间间隔
+	let api_count = cache_data[key_id_num] || false 	//获取 访问API次数间隔的时间
+	let datetime = new Date().getTime()
+	let cache = time * count
 	
 	// console.log('api_time=',api_time)
 	// console.log('api_count=',api_count)
 
-	if (api_time === '' || api_time === null || api_count === undefined) {
-		fastify.set_redis(key_id, datetime, cache)
-		fastify.set_redis(key_id2, 1, cache)
-	} else {
+	if (api_time && api_count) {
 		//Api时间限制
 		let second = (datetime - parseInt(api_time)) / 1000
 		// console.log('second='+second)
 
 		if (second < time) {
-
 			//Api次数限制
 			let add = parseInt(api_count) + 1
-
-			if (add > count) {
-				return false
-			} else {
-				fastify.set_redis(key_id2, add, cache)
-			}
+			if (add > count) return Promise.resolve(false)
+			cache_data[key_id_num] = add;
 		} else {
-			fastify.set_redis(key_id, datetime, cache)
-			fastify.set_redis(key_id2, 1, cache)
+			cache_data[key_id_time] = datetime;
+			cache_data[key_id_num] = 1;
 		}
+	}else {
+		cache_data[key_id_time] = datetime;
+		cache_data[key_id_num] = 1;
 	}
-	
-	return true
+
+	return Promise.resolve(true)
 }
