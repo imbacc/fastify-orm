@@ -16,7 +16,6 @@ module.exports = (fastify) => {
     
 	fastify.decorate('md5', require('md5-node'))	//fastify.config.test
     fastify.decorate('config', require('../common/config'))	//fastify.config.test
-	fastify.decorate('api_cache', {})	//fastify.config.test
 	
 	// fastify.decorate('cache_sql',(name, sql, val, time, req) => {
     //     return fastify.exec[name].query(sql, val).then((res) => {

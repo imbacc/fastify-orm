@@ -2,7 +2,7 @@ const Redis = require('redis')		//Redis驱动
 const config = require('../common/config')	//Redis配置
 
 const redis = Redis.createClient(config.redis.port, config.redis.host)
-redis.on('error', (err) => console.log('redis err='+err))
+redis.on('error', (err) => console.red('redis 启动失败='+err))
 
 const get_redis = async (key) => {
 	const p = new Promise((resolve, reject) => {

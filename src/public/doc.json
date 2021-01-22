@@ -1,0 +1,152 @@
+{
+    "schemes": ["http","https"],
+    "swagger": "2.0",
+    "info": {
+        "description": "用户登录",
+        "title": "用户接口",
+        "contact": {
+            "name": "imbacc",
+            "email": "imbacc@qq.com"
+        },
+        "license": {
+            "name": "Apache 2.0"
+        },
+        "version": "1.0.0"
+    },
+    "host": "127.0.0.1:1111",
+    "basePath": "/api/user",
+    "paths": {
+        "/captcha": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "base"
+                ],
+                "summary": "生成验证码",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/comm.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "put": {
+                "description": "用户登录接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "base"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "接口访问来源",
+                        "name": "platform",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "date",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/comm.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/out": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system_user"
+                ],
+                "summary": "用户退出"
+            }
+        }
+    },
+    "definitions": {
+        "comm.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.Login": {
+            "type": "object",
+            "required": [
+                "pass",
+                "type",
+                "user"
+            ],
+            "properties": {
+                "code": {
+                    "description": "验证码",
+                    "type": "string"
+                },
+                "codeId": {
+                    "description": "验证码id",
+                    "type": "string"
+                },
+                "pass": {
+                    "description": "账户密码或短信验证码",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "登录类型",
+                    "type": "integer"
+                },
+                "user": {
+                    "description": "用户账户",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

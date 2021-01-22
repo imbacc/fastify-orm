@@ -1,13 +1,11 @@
 const fs = require('fs')
 const { Sequelize, DataTypes } = require("sequelize")
-const config = require('../common/config').mysql
-
-console.log("config=", config);
+const { mysql } = require('../common/config')
 
 const db = {}
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
+const sequelize = new Sequelize(mysql.database, mysql.username, mysql.password, {
+    host: mysql.host,
     dialect: 'mysql',
     pool: {
         max: 5,
@@ -29,7 +27,7 @@ fs.readdirSync(path).map((fileName) => {
     db[fileName.replace('.js', '')] = require(`./entity/${fileName}`)(sequelize, DataTypes)
 })
 
-if (config.createTable) {
+if (mysql.createTable) {
     for (const info in db) {
         let entity = db[info]
         entity.sync()

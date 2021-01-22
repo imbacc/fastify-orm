@@ -1,5 +1,5 @@
-const split = require('split2')
-const stream = split(JSON.parse)
+// const split = require('split2')
+// const stream = split(JSON.parse)
 const fastify = require('fastify')({
 	logger: false,	// 日志信息
 	// level: 'info',
@@ -20,9 +20,8 @@ const fastify = require('fastify')({
 	// 	}
 	// }
  })
-const port = 3000	// 默认端口
-const ip = '127.0.0.1'	// 指定监听的地址 当部署在 Docker 或其它容器上时，明智的做法是监听 0.0.0.0
-const queue = 511	// 指定积压队列的大小
+
+const { port, ip, queue } = require('./common/config').listen
 
 require('./common/decorate')(fastify) 	//注册装饰器
 require('./common/intercept')(fastify)  //注册拦截器
@@ -32,6 +31,7 @@ require('./common/tools')(fastify) 		//注册插件
 require('./db/sequelize')(fastify) 		//注册sequelize
 require('./db/redis')(fastify) 			//注册Redis
 require('./router/index')(fastify) 		//注册路由
+require('./common/swagger')(fastify)	//注册swagger
 
 //启动服务	nodemon	index
 fastify.listen(port, ip, queue, (err)=>{

@@ -1,5 +1,6 @@
 const resultful = require('../db/resultful.js')	//返回数据构造
 const apitime = require('./apitime')			//API限流
+const jumpCheck = global.jump_map				//跳过检测jwt
 
 //检测CMAKE令牌
 const check_cmake = (fastify,head,req,reply,code = 'SUCCESS',next) => {
@@ -41,10 +42,10 @@ const check_jwt = (fastify,head,req,reply,next) => {
     // if(req.req.method === 'OPTIONS'){
     // 	reply.code(200).send()
     // 	return
-    // }
+	// }
 	req.jwtVerify((err, decoded) => {
 		//没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
-		let state = req.req.url.indexOf('version') !== -1 ? 'JUMP_CHECK' : 'WHEREIS_CRACK';
+		let state = jumpCheck.get(req.req.url) ? 'JUMP_CHECK' : 'WHEREIS_CRACK';
         if(err && err.name === 'JsonWebTokenError') {
             reply.code(403).send(resultful('UNMAKETOKEN_RUBBISH'))
             return
